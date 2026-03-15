@@ -1236,8 +1236,9 @@ async function resetDate() {
   // Трие всички bookings на Виктор (независимо дали сме admin или user)
   const vid = await getVictorId()
   if (vid) {
+    // Трие ВСИЧКИ bookings на Виктор
     const { error } = await db.from('bookings').delete().eq('user_id', vid)
-    if (error) { alert('Грешка при изтриване: ' + error.message); return }
+    if (error) { alert('Грешка: ' + error.message); return }
   }
 
   // Нулира локалното state
@@ -1298,13 +1299,9 @@ async function submitDate() {
     updated_at: new Date().toISOString()
   }
 
-  // Upsert — update ако има, insert ако няма
-  const { data: existing } = await db.from('bookings').select('id').eq('user_id', payload.user_id).limit(1)
-  if (existing && existing.length) {
-    await db.from('bookings').update(payload).eq('id', existing[0].id)
-  } else {
-    await db.from('bookings').insert(payload)
-  }
+  // Изтрий всички стари bookings и запиши нов
+  await db.from('bookings').delete().eq('user_id', payload.user_id)
+  await db.from('bookings').insert(payload)
 
   closeDateModal()
   renderDateBadge()
