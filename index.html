@@ -64,7 +64,32 @@ body::before {
 }
 .login-box::before { top: 12px; left: 12px; border-width: 1px 0 0 1px; }
 .login-box::after  { bottom: 12px; right: 12px; border-width: 0 1px 1px 0; }
-.login-title { font-size: 1.8rem; font-weight: 300; color: var(--cream); margin-bottom: 0.3rem; }
+.login-bg-name {
+  position: absolute;
+  bottom: -1rem; right: -0.5rem;
+  font-size: 6rem; font-weight: 300;
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(201,168,76,0.1);
+  line-height: 1;
+  user-select: none; pointer-events: none;
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+}
+.login-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.5rem; font-weight: 300;
+  color: var(--text-muted); margin-bottom: 0.2rem;
+  display: flex; align-items: baseline; gap: 0.5rem;
+}
+.login-title-50 {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  color: var(--gold);
+  font-size: 3.8rem;
+  font-weight: 300;
+  line-height: 0.85;
+  letter-spacing: 0.02em;
+}
 .login-subtitle { font-size: 0.85rem; font-style: italic; color: var(--text-muted); margin-bottom: 2rem; }
 .login-label {
   font-family: 'Tenor Sans', sans-serif;
@@ -229,7 +254,7 @@ body::before {
   font-family: 'Cormorant Garamond', serif;
 }
 .scroll-hint {
-  position: absolute; bottom: 2.5rem; left: 50%;
+  position: absolute; bottom: 1.2rem; left: 50%;
   transform: translateX(-50%);
   display: flex; flex-direction: column; align-items: center; gap: 0.5rem;
   opacity: 0; animation: fadeIn 1.5s ease forwards 2s;
@@ -705,6 +730,7 @@ body::before {
   .chef-card-left { border-right: none; border-bottom: 1px solid rgba(201,168,76,0.12); }
   .date-modal-box, .welcome-box, .thankyou-box { padding: 2rem 1.5rem; }
   #admin-bar { padding: 0.5rem 1rem; }
+  .scroll-hint { display: none; }
 }
 </style>
 </head>
@@ -713,8 +739,9 @@ body::before {
 <!-- LOGIN -->
 <div id="screen-login">
   <div class="login-box">
-    <h2 class="login-title">Виктор · 50</h2>
-    <p class="login-subtitle">Твоят личен ваучер</p>
+    <div class="login-bg-name">Виктор</div>
+    <h2 class="login-title">Твоите <span class="login-title-50">50</span></h2>
+    <p class="login-subtitle">По твой вкус!</p>
     <div id="login-error" class="login-error hidden"></div>
     <label class="login-label" for="password-input">Парола</label>
     <input class="login-input" type="password" id="password-input" autocomplete="current-password" placeholder="••••••••">
@@ -782,7 +809,7 @@ body::before {
     А преживяване — едно следобедно пространство, в което готвенето
     се превръща в изкуство, а ти — в негов главен герой.
   </p>
-  <div class="intro-signature reveal reveal-delay-2">— от твоя брат</div>
+  <div class="intro-signature reveal reveal-delay-2">— Бобо, Ани, Софи и Ханна</div>
 </section>
 
 <!-- VOUCHER -->
@@ -1027,7 +1054,7 @@ body::before {
   </p>
   <div class="reveal reveal-delay-1">
     <span class="closing-from">С обич,</span>
-    <div class="closing-name">твоят брат</div>
+    <div class="closing-name">Бобо, Ани, Софи и Ханна</div>
   </div>
   <div class="closing-footer">
     <span class="footer-line">Виктор · 50 години</span>
