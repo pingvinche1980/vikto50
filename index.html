@@ -1232,13 +1232,28 @@ async function closeWelcome() {
 
 async function resetDate() {
   if (!confirm('Изтриване на избраната дата?')) return
+
+  // Трие всички bookings на Виктор (независимо дали сме admin или user)
   const vid = await getVictorId()
-  if (vid) await db.from('bookings').delete().eq('user_id', vid)
+  if (vid) {
+    const { error } = await db.from('bookings').delete().eq('user_id', vid)
+    if (error) { alert('Грешка при изтриване: ' + error.message); return }
+  }
+
+  // Нулира локалното state
   eventDate = null
+
+  // Скрива badge на ваучера
   document.getElementById('voucher-date-badge').classList.add('hidden')
+  document.getElementById('voucher-date-val').textContent = '—'
+
+  // Връща бутона
   document.getElementById('date-cta-btn').textContent = 'Избери датата'
+
+  // Връща freedom item I
   const ctaEl = document.getElementById('freedom-date-cta')
   if (ctaEl) ctaEl.innerHTML = 'Ти решаваш'
+
   alert('Датата е изтрита.')
 }
 
@@ -1270,14 +1285,21 @@ async function submitDate() {
 
   eventDate = new Date(val)
 
+  // Admin записва датата като Виктор
+  let bookingUserId = currentUser.id
+  if (currentRole === 'admin') {
+    const vid = await getVictorId()
+    if (vid) bookingUserId = vid
+  }
+
   const payload = {
-    user_id:    currentUser.id,
+    user_id:    bookingUserId,
     event_date: eventDate.toISOString(),
     updated_at: new Date().toISOString()
   }
 
   // Upsert — update ако има, insert ако няма
-  const { data: existing } = await db.from('bookings').select('id').eq('user_id', currentUser.id).limit(1)
+  const { data: existing } = await db.from('bookings').select('id').eq('user_id', payload.user_id).limit(1)
   if (existing && existing.length) {
     await db.from('bookings').update(payload).eq('id', existing[0].id)
   } else {
