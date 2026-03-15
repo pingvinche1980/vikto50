@@ -729,6 +729,7 @@ body::before {
   <button class="admin-btn" onclick="scrollToSection('section-gallery')">Виж галерия</button>
   <button class="admin-btn" onclick="showFireworks()">Тествай фойерверки</button>
   <button class="admin-btn admin-btn-danger" onclick="resetFirstLogin()">Reset first login</button>
+  <button class="admin-btn admin-btn-danger" onclick="resetDate()">Reset дата</button>
   <button class="logout-btn" onclick="handleLogout()">Изход</button>
 </div>
 
@@ -1229,7 +1230,17 @@ async function closeWelcome() {
   if (currentUser) await db.from('profiles').update({ first_login_done: true }).eq('id', currentUser.id)
 }
 
-async function resetFirstLogin() {
+async function resetDate() {
+  if (!confirm('Изтриване на избраната дата?')) return
+  const vid = await getVictorId()
+  if (vid) await db.from('bookings').delete().eq('user_id', vid)
+  eventDate = null
+  document.getElementById('voucher-date-badge').classList.add('hidden')
+  document.getElementById('date-cta-btn').textContent = 'Избери датата'
+  const ctaEl = document.getElementById('freedom-date-cta')
+  if (ctaEl) ctaEl.innerHTML = 'Ти решаваш'
+  alert('Датата е изтрита.')
+}
   const { data: users } = await db.from('profiles').select('id').eq('role', 'user')
   if (users && users.length) {
     await db.from('profiles').update({ first_login_done: false }).eq('id', users[0].id)
