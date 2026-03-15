@@ -1241,6 +1241,8 @@ async function resetDate() {
   if (ctaEl) ctaEl.innerHTML = 'Ти решаваш'
   alert('Датата е изтрита.')
 }
+
+async function resetFirstLogin() {
   const { data: users } = await db.from('profiles').select('id').eq('role', 'user')
   if (users && users.length) {
     await db.from('profiles').update({ first_login_done: false }).eq('id', users[0].id)
